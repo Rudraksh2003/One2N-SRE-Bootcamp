@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+</head>
+<body>
+    <h1>Add a New Student</h1>
+    <form id="student-form" method="POST" action="/api/v1/students">
+        <label for="name">Student Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required><br><br>
+        
+        <label for="grade">Grade:</label>
+        <input type="text" id="grade" name="grade" required><br><br>
+
+        <button type="submit">Add Student</button>
+    </form>
+
+    <hr>
+
+    <h2>Get Student by ID</h2>
+    <form id="get-student-form">
+        <label for="student_id">Enter Student ID:</label>
+        <input type="number" id="student_id" name="student_id" required><br><br>
+        
+        <button type="submit">Get Student</button>
+    </form>
+
+    <hr>
+
+    <div id="student-details">
+        <h3>Student Details</h3>
+        <p id="student-name"></p>
+        <p id="student-age"></p>
+        <p id="student-grade"></p>
+    </div>
+
+    <script>
+        // Form submission to add a new student
+        document.getElementById('student-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const studentData = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                grade: document.getElementById('grade').value
+            };
+
+            fetch('/api/v1/students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(studentData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Student added with ID: ' + data.id);
+                // Optionally, clear the form
+                document.getElementById('student-form').reset();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Form submission to get student details by ID
+        document.getElementById('get-student-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const studentId = document.getElementById('student_id').value;
+
+            fetch(`/api/v1/students/${studentId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('student-name').innerText = 'Name: ' + data.student.name;
+                    document.getElementById('student-age').innerText = 'Age: ' + data.student.age;
+                    document.getElementById('student-grade').innerText = 'Grade: ' + data.student.grade;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
