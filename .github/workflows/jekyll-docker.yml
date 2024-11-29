@@ -33,7 +33,7 @@ jobs:
       - name: Build Backend Docker Image
         run: |
           echo "Building Backend Docker Image..."
-          docker build -t o2n:latest . 
+          docker build -t rudrakshladdha/o2n:latest . 
           echo "Backend Docker Image built and tagged successfully."
 
       # Step 5: Log in to Docker Hub
