@@ -1,12 +1,12 @@
-name: CI Pipeline
-
 on:
   push:
     branches:
       - main
 
 env:
-  BACKEND_IMAGE: rudrakshladdha/o2n
+  IMAGE: rudrakshladdha/o2n
+  Im: o2n
+  DOCKER_USERNAME: rudrakshladdha # Use GitHub Secrets for Docker username
 
 jobs:
   build:
@@ -21,25 +21,24 @@ jobs:
 
       - name: Install Docker Compose
         run: |
-          set -e
-          VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4 || echo "v2.20.2")
-          sudo curl -L "https://github.com/docker/compose/releases/download/$VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
-          docker-compose --version
+          docker-compose --version  # Verify installation
+
+     
 
       - name: Build Backend Docker Image
         run: |
-          echo "Building Docker Image with caching..."
-          docker build --cache-from=type=registry,ref=$BACKEND_IMAGE:cache \
-                       --cache-to=type=registry,mode=max,ref=$BACKEND_IMAGE:cache \
-                       -t $BACKEND_IMAGE .
-          echo "Docker Image built successfully."
+          echo "Building  Backend Docker Image..."
+          docker build -t ${{ env.IM }} .
+          docker tag ${{ env.IM }}:latest ${{ env.IM }}:latest
+          echo "Data Backend Docker Image built and tagged successfully."
 
       - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ env.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Push Backend Docker Image
+      - name: Push Data Backend Docker Image
         run: |
-          echo "Pushing Backend Docker Image..."
-          docker push $BACKEND_IMAGE:latest
-          echo "Docker Image pushed successfully."
+          echo "Pushing Data Backend Docker Image..."
+          docker push ${{ env.IMAGE }}:latest
+          echo "Data Backend Docker Image pushed successfully."
