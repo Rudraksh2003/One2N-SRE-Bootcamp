@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: alphine-latest
 
     steps:
       # Step 1: Checkout the code
@@ -33,7 +33,7 @@ jobs:
       - name: Build Backend Docker Image
         run: |
           echo "Building Backend Docker Image..."
-          docker build -t ${{ env.IMAGE }}:latest -f ./Dockerfile .    
+          docker build -t $o2n:latest . 
           echo "Backend Docker Image built and tagged successfully."
 
       # Step 5: Log in to Docker Hub
