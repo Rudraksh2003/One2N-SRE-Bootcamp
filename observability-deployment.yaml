@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: observability-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: observability-stack
+  template:
+    metadata:
+      labels:
+        app: observability-stack
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus:latest
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - services
+
