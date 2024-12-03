@@ -1,0 +1,5 @@
+{{- if .Values.service.type }}
+Service Type: {{ .Values.service.type }}
+{{- else }}
+Service type is not specified.
+{{- end }}
