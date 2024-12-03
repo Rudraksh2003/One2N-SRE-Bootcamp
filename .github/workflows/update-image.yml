@@ -1,0 +1,29 @@
+name: Update Image Tag in Helm Values
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "helm-charts/**"
+
+jobs:
+  update-values:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Update Image Tag
+        run: |
+          IMAGE_TAG=$(curl --silent "https://hub.docker.com/v2/repositories/rudrakshladdha/o2n/tags/" | jq -r '.results[0].name')
+          sed -i "s/image: .*/image: rudrakshladdha\/o2n:$IMAGE_TAG/" helm-charts/app-chart/values.yaml
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add helm-charts/app-chart/values.yaml
+          git commit -m "Update image tag to $IMAGE_TAG"
+          git push origin main
