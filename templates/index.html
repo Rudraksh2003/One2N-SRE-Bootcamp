@@ -32,6 +32,16 @@
 
     <hr>
 
+    <h2>Delete Student by ID</h2>
+    <form id="delete-student-form">
+        <label for="delete_student_id">Enter Student ID to Delete:</label>
+        <input type="number" id="delete_student_id" name="delete_student_id" required><br><br>
+        
+        <button type="submit">Delete Student</button>
+    </form>
+
+    <hr>
+
     <div id="student-details">
         <h3>Student Details</h3>
         <p id="student-name"></p>
@@ -85,6 +95,27 @@
             })
             .catch(error => console.error('Error:', error));
         });
+
+        // Form submission to delete student by ID
+        document.getElementById('delete-student-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const studentId = document.getElementById('delete_student_id').value;
+
+            fetch(`/api/v1/students/${studentId}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert(data.message); // Display success message
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
     </script>
 </body>
 </html>
+
