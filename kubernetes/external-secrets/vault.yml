@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-config
+  namespace: dependent-services
+data:
+  local.json: |
+    {
+      "backend": {
+        "file": {
+          "path": "/vault/data"
+        }
+      },
+      "listener": {
+        "tcp": {
+          "address": "0.0.0.0:8200",
+          "tls_disable": true
+        }
+      },
+      "default_lease_ttl": "168h",
+      "max_lease_ttl": "720h"
+    }
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault
+  namespace: dependent-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      nodeSelector:
+        type: dependent_services
+      containers:
+        - name: vault
+          image: hashicorp/vault:latest
+          ports:
+            - containerPort: 8200
+          securityContext:
+            capabilities:
+              add: ["IPC_LOCK"]
+          env:
+            - name: VAULT_DEV_ROOT_TOKEN_ID
+              value: "root"
+            - name: VAULT_DEV_MODE
+              value: "true"
+            - name: VAULT_LOG_LEVEL
+              value: "debug"
+          volumeMounts:
+            - name: vault-storage
+              mountPath: /vault/data
+            - name: vault-config
+              mountPath: /vault/config
+              subPath: local.json
+      volumes:
+        - name: vault-storage
+          persistentVolumeClaim:
+            claimName: vault-pvc
+        - name: vault-config
+          configMap:
+            name: vault-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault
+  namespace: dependent-services
+spec:
+  selector:
+    app: vault
+  ports:
+    - protocol: TCP
+      port: 8200  # Service port
+      targetPort: 8200  # Container port
+  type: ClusterIP  # Change to LoadBalancer or NodePort for external access
