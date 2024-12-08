@@ -1,29 +1,54 @@
-version: 3.8
+version: '3.8'
 
 services:
-  web:
-   build: .
-   container_name: o2n_container
-   ports:
-     - 5000:5000
-   environment:
-     - FLASK_APP = app.py
-     - FLASK_RUN_HOST =0.0.0.0
-     - FLASK__ENV = production
-  volumes:
-     - .:/app
-  depend_on:
+  api1:
+    build: .
+    container_name: o2n_api1
+    ports:
+      - "8081:5000"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_ENV=production
+    depends_on:
       - db
+    volumes:
+      - .:/app
 
-db:
-   image: postgres:alphine
-   container_name: o2n_db
-   environment:
+  api2:
+    build: .
+    container_name: o2n_api2
+    ports:
+      - "8082:5000"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_ENV=production
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:alpine
+    container_name: o2n_db
+    environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: o2n_db
-   volumes:
+    volumes:
       - db_data:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:latest
+    container_name: o2n_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - api1
+      - api2
 
 volumes:
   db_data:
