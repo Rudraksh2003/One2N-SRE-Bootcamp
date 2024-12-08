@@ -1,7 +1,6 @@
 # One2N-SRE-Bootcamp
-# Student API Deployment Project
 
-Welcome to the **Student API Deployment Project** repository! This project provides an infrastructure-as-code approach to managing, deploying, and scaling the `student-api` application using Kubernetes and Helm.
+Welcome to the **One2N-SRE-Bootcamp** repository! This project provides an infrastructure-as-code approach to managing, deploying, and scaling the `student-api` application using Kubernetes and Helm.
 
 ## Table of Contents
 
