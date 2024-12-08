@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: student-api
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/Rudraksh2003/One2N-SRE-Bootcamp'
+    targetRevision: HEAD
+    path: helm-charts/app-chart
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: student-api
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
