@@ -1,0 +1,30 @@
+namespace: student-api
+
+replicaCount: 2
+image:
+  repository: rudrakshladdha/o2n
+  tag: latest
+  pullPolicy: IfNotPresent
+
+nodeSelector:
+  type: application
+
+ports:
+  container: 3000
+  service:
+    port: 80
+    targetPort: 5000
+
+appConfig:
+  APP_ENV: production
+  APP_DEBUG: "false"
+
+appSecret:
+  SECRET_KEY: ""
+
+service:
+  type: ClusterIP
+
+rbac:
+  create: true  # Or false based on your need
+pspEnabled: false

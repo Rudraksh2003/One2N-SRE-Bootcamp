@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespace }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: {{ .Values.namespace }}
+data:
+  APP_ENV: production
+  APP_DEBUG: "false"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+  namespace: {{ .Values.namespace }}
+type: Opaque
+stringData:
+  SECRET_KEY: "{{ .Values.db.password }}"  # Ensure this is quoted
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-api2
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: student-api2
+  template:
+    metadata:
+      labels:
+        app: student-api2
+    spec:
+      nodeSelector:
+        type: application
+      containers:
+        - name: student-api2
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secret
+          volumeMounts:
+            - name: migrations-volume
+              mountPath: /app/migrations
+          env:
+            - name: MY_ENV_VAR
+              value: "1234"  # Ensure this is a string (quoted)
+            - name: ANOTHER_ENV_VAR
+              value: "{{ .Values.someValue | quote }}"  # Using Helm's `quote` function t
+
+      volumes:
+        - name: migrations-volume
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: student-api2
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: student-api2
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: ClusterIP

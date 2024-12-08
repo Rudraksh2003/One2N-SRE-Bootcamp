@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault2
+  namespace: dependent-services
+  labels:
+    app: vault
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: student-api
+    meta.helm.sh/release-namespace: student-api2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      nodeSelector:
+        type: dependent_services
+      containers:
+        - name: vault
+          image: {{ .Values.vault.image | default "hashicorp/vault:latest" }}
+          ports:
+            - containerPort: 8200
+          env:
+            - name: VAULT_DEV_ROOT_TOKEN_ID
+              value: {{ .Values.vault.rootToken | default "default-root-token" | quote }}
+            - name: VAULT_DEV_MODE
+              value: {{ .Values.vault.devMode | default "true" | quote }}
+          volumeMounts:
+            - name: vault-storage
+              mountPath: /vault/data
+      volumes:
+        - name: vault-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.vaultPVC.claimName | default "vault-pvc" }}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-backup
+  namespace: student-api2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault-backup
+  template:
+    metadata:
+      labels:
+        app: vault-backup
+    spec:
+      containers:
+        - name: vault-backup
+          image: {{ .Values.vaultBackup.image | default "hashicorp/vault:latest" }}
+          volumeMounts:
+            - name: vault-backup-storage
+              mountPath: /vault/backup
+      volumes:
+        - name: vault-backup-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.vaultBackupPVC.claimName | default "vault-backup-pvc" }}

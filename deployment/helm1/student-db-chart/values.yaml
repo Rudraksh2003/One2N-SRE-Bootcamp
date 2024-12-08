@@ -1,0 +1,26 @@
+namespace: student-api
+
+replicaCount: 1
+image:
+  repository: postgres
+  tag: 13.3
+  pullPolicy: IfNotPresent
+
+nodeSelector:
+  type: database
+
+ports:
+  container: 5432
+
+dbConfig:
+  DB_HOST: postgres
+  DB_PORT: "5432"
+
+dbSecret:
+  DB_USER: "admin"
+  DB_PASSWORD: "changeme"
+
+service:
+  type: ClusterIP
+
+

@@ -1,0 +1,141 @@
+# Replica settings
+replicaCount: 2
+
+# Image settings
+image:
+  repository: rudrakshladdha/o2n
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Namespace for deployment
+namespace: student-api2
+
+# Resource settings (limits and requests)
+resources: {}
+
+# Database settings
+db:
+  user: postgres
+  password: "1234"  # Ensure password is a string
+  name: student-db
+
+# Vault settings
+vault:
+  image: "hashicorp/vault:latest"
+  rootToken: "default-root-token"
+  devMode: "true"
+  PVC:
+   claimName: "vault-backup-pvc"
+   create: true
+# Vault backup settings
+vaultBackup:
+  image: "hashicorp/vault:latest"
+  rootToken: "backup-root-token"
+  devMode: "true"
+  PVC:
+    claimName: "vault-backup-pvc"  # This defines the PVC name for Vault backup
+    create: true  # Create the PVC if it doesn't exist
+    storageClassName: "standard"  # Optional: specify the storage class
+    resources:
+      requests:
+        storage: 10Gi  # Set the size of the PVC
+
+
+
+# Persistent Volume Claim for Vault
+vaultPVC:
+  claimName: "vault-pvc-new2"
+  create: true
+
+# Prometheus settings
+prometheus:
+  enabled: true
+  namespace: dependent-services
+  install: true
+
+# Grafana settings
+grafana:
+  enabled: true
+  namespace: dependent-services
+  install: true
+  serviceAccount:
+    create: true
+    name: student-api-grafana
+
+# Service Account settings
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+# Pod settings
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+
+# Security context for containers
+securityContext: {}
+
+# Service settings
+service:
+  type: ClusterIP
+  port: 80
+
+# Environment variables for the deployment
+env:
+  - name: MY_ENV_VAR
+    value: "1234"  # Ensure numeric values are wrapped in quotes as strings
+
+# Ingress settings
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+# Probes for application health
+livenessProbe:
+  httpGet:
+    path: /
+    port: 80  # Replace with actual application port
+  initialDelaySeconds: 10
+  timeoutSeconds: 5
+  periodSeconds: 10
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 80  # Replace with actual application port
+  initialDelaySeconds: 10
+  timeoutSeconds: 5
+  periodSeconds: 10
+  failureThreshold: 3
+
+# Autoscaling settings
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+# Volume settings for persistent data
+volumes:
+  - name: vault-data
+    persistentVolumeClaim:
+      claimName: vault-pvc-new2
+
+volumeMounts:
+  - name: vault-data
+    mountPath: /data
+
+# Node scheduling settings
+nodeSelector: {}
+tolerations: []
+affinity: {}

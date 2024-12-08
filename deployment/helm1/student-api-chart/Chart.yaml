@@ -1,0 +1,7 @@
+apiVersion: v2
+name: student-api
+description: A Helm chart for deploying the student-api application
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+

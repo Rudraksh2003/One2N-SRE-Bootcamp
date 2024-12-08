@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.vaultBackup.PVC.claimName | default "vault-backup-pvc" }}
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: student-api
+    meta.helm.sh/release-namespace: student-api2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.vaultBackup.PVC.resources.requests.storage | default "10Gi" }}
+  storageClassName: {{ .Values.vaultBackup.PVC.storageClassName | default "standard" }}
+

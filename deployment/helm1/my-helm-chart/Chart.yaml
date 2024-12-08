@@ -1,0 +1,11 @@
+apiVersion: v2
+name: my-helm-chart
+description: Helm chart for dependent services, including Prometheus, Grafana, Vault, ESO
+version: 0.1.0
+dependencies:
+  - name: prometheus
+    version: 15.0.0
+    repository: https://prometheus-community.github.io/helm-charts
+  - name: grafana
+    version: 6.0.0
+    repository: https://grafana.github.io/helm-charts

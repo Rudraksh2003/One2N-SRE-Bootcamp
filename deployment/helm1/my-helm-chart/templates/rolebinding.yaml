@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dependent-services-role-binding
+  namespace: dependent-services
+subjects:
+  - kind: ServiceAccount
+    name: default  # Change this if you're using a specific service account for your deployments
+    namespace: dependent-services
+roleRef:
+  kind: Role
+  name: dependent-services-role
+  apiGroup: rbac.authorization.k8s.io

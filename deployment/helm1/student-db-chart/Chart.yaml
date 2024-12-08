@@ -1,0 +1,7 @@
+apiVersion: v2
+name: student-db
+description: A Helm chart for deploying the PostgreSQL database
+type: application
+version: 0.1.0
+appVersion: "13.3"
+

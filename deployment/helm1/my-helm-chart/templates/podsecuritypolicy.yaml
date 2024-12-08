@@ -1,0 +1,19 @@
+apiVersion: policy/v1beta1  # Change to policy/v1 if using Kubernetes 1.25+
+kind: PodSecurityPolicy
+metadata:
+  name: dependent-services-psp
+spec:
+  privileged: false
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  volumes:
+    - '*'

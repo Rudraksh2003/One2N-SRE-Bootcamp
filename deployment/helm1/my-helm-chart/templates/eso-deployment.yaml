@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-secrets
+  namespace: dependent-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: external-secrets
+  template:
+    metadata:
+      labels:
+        app: external-secrets
+    spec:
+      nodeSelector:
+        type: dependent_services
+      containers:
+        - name: external-secrets
+          image: rudrakshladdha/o2n:latest
+          env:
+            - name: VAULT_ADDR
+              value: "http://vault.dependent-services.svc.cluster.local:8200"
+            - name: VAULT_TOKEN
+              value: "root"
+
