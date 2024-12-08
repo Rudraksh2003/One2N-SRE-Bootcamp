@@ -19,7 +19,6 @@ Welcome to the **One2N-SRE-Bootcamp** repository! This project provides an infra
 
 The `student-api` application is designed to manage student records, providing CRUD (Create, Read, Update, Delete) operations via a RESTful API. This repository focuses on deploying the application in Kubernetes using Helm for package management and ease of deployment.
 
-The repository includes two namespaces to allow flexible deployments for staging (`student-api-new`) and production (`student-api`).
 
 ---
 
