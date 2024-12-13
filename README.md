@@ -1,6 +1,6 @@
-# One2N-SRE-Bootcamp
+#Student-CURD-rest-api-app
 
-Welcome to the **One2N-SRE-Bootcamp** repository! This project provides an infrastructure-as-code approach to managing, deploying, and scaling the `student-api` application using Kubernetes and Helm.
+Welcome to the **Student-CURD-rest-api-app** repository! This project provides an infrastructure-as-code approach to managing, deploying, and scaling the `student-api` application using Kubernetes and Helm.
 
 ## Table of Contents
 
@@ -24,7 +24,6 @@ The `student-api` application is designed to manage student records, providing C
 
 ## Features
 
-- Automated deployment with Helm charts.
 - Namespace segregation for staging and production environments.
 - Seamless configuration management.
 - Scalable and robust architecture on Kubernetes.
@@ -36,7 +35,6 @@ The `student-api` application is designed to manage student records, providing C
 Ensure the following tools are installed and configured on your system:
 
 - [Kubernetes](https://kubernetes.io/) cluster (Minikube, EKS, GKE, or AKS recommended).
-- [Helm](https://helm.sh/) 3.x or higher.
 - [kubectl](https://kubernetes.io/docs/tasks/tools/).
 
 ---
@@ -142,68 +140,6 @@ Access the APIs at:
 │   ├── agrocd
 │   │   ├── argocd-apps.yaml
 │   │   └── argocd-repository-secret.yaml
-│   ├── helm1
-│   │   ├── my-helm-chart
-│   │   │   ├── Chart.lock
-│   │   │   ├── charts
-│   │   │   │   ├── grafana-6.0.0.tgz
-│   │   │   │   └── prometheus-15.0.0.tgz
-│   │   │   ├── Chart.yaml
-│   │   │   ├── templates
-│   │   │   │   ├── eso-deployment.yaml
-│   │   │   │   ├── grafana-deployment.yaml
-│   │   │   │   ├── namespace.yaml
-│   │   │   │   ├── podsecuritypolicy.yaml
-│   │   │   │   ├── prometheus-deployment.yaml
-│   │   │   │   ├── pvc.yaml
-│   │   │   │   ├── rolebinding-psp.yaml
-│   │   │   │   ├── rolebinding.yaml
-│   │   │   │   ├── role-psp.yaml
-│   │   │   │   ├── role.yaml
-│   │   │   │   ├── serviceMonitor.yaml
-│   │   │   │   └── vault-deployment.yaml
-│   │   │   └── values.yaml
-│   │   ├── my-helm-chart-0.1.0.tgz
-│   │   ├── student-api-0.1.0.tgz
-│   │   ├── student-api-chart
-│   │   │   ├── Chart.yaml
-│   │   │   ├── templates
-│   │   │   │   ├── configmap.yaml
-│   │   │   │   ├── deployment.yaml
-│   │   │   │   ├── namespace.yaml
-│   │   │   │   ├── secret.yaml
-│   │   │   │   └── service.yaml
-│   │   │   └── values.yaml
-│   │   ├── student-db-0.1.0.tgz
-│   │   └── student-db-chart
-│   │       ├── Chart.yaml
-│   │       ├── templates
-│   │       │   ├── configmap.yaml
-│   │       │   ├── deployment.yaml
-│   │       │   └── secret.yaml
-│   │       └── values.yaml
-│   ├── helm2
-│   │   └── student-api-helm-chart
-│   │       ├── charts
-│   │       ├── Chart.yaml
-│   │       ├── templates
-│   │       │   ├── db-deployment.yaml
-│   │       │   ├── db-pvc.yaml
-│   │       │   ├── deployment.yaml
-│   │       │   ├── _helpers.tpl
-│   │       │   ├── hpa.yaml
-│   │       │   ├── ingress.yaml
-│   │       │   ├── NOTES.txt
-│   │       │   ├── secret.yaml
-│   │       │   ├── serviceaccount.yaml
-│   │       │   ├── service.yaml
-│   │       │   ├── tests
-│   │       │   │   └── test-connection.yaml
-│   │       │   ├── vault2-backup.yaml
-│   │       │   ├── vault-deployment.yaml
-│   │       │   └── vault-pvc.yaml
-│   │       └── values.yaml
-│   └── prometheus-server.yaml
 ├── docker-compose.yml
 ├── Dockerfile
 ├── install_dependencies.sh
