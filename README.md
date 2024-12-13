@@ -1,4 +1,4 @@
-#Student-CURD-rest-api-app
+# Student-CURD-rest-api-app
 
 Welcome to the **Student-CURD-rest-api-app** repository! This project provides an infrastructure-as-code approach to managing, deploying, and scaling the `student-api` application using Kubernetes and Helm.
 
