@@ -1,6 +1,6 @@
-# Student-CURD-rest-api-app
+# Student-CRUD-rest-api-app
 
-Welcome to the **Student-CURD-rest-api-app** repository! This project provides an infrastructure-as-code approach to managing, deploying, and scaling the `student-api` application using Kubernetes and Helm.
+Welcome to the **Student-CRUD-rest-api-app** repository! This project provides an infrastructure-as-code approach to managing, deploying, and scaling the `student-api` application using Kubernetes and Helm.
 
 ## Table of Contents
 
@@ -222,5 +222,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-Thank you for using the **Student API Deployment Project**! If you encounter any issues, feel free to open an issue in this repository.
+Thank you for using the **Student-CRUD-rest-api-app**! If you encounter any issues, feel free to open an issue in this repository.
 
